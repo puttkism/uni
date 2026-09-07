@@ -1,0 +1,118 @@
+Project university_management {
+  database_type: 'SQLite'
+  Note: 'University domain model used by the Django academics app'
+}
+
+Enum subject_requirement_type {
+  Core
+  Major
+  GenEd
+  Elective
+}
+
+Enum enrollment_status {
+  Enrolled
+  Withdrawn
+  Completed
+  Failed
+}
+
+Table University {
+  id uuid [pk]
+  name varchar [not null]
+}
+
+Table Faculty {
+  id uuid [pk]
+  university_id uuid [not null]
+  name varchar [not null]
+}
+
+Table Department {
+  id uuid [pk]
+  faculty_id uuid [not null]
+  name varchar [not null]
+}
+
+Table Curriculum {
+  id uuid [pk]
+  department_id uuid [not null]
+  name varchar [not null]
+  year int [not null]
+
+  Note: 'Example: Computer Engineering Curriculum 2026'
+}
+
+Table Subject {
+  id uuid [pk]
+  department_id uuid
+  code varchar [not null, unique]
+  name varchar [not null]
+  credit int [not null]
+
+  Note: 'Subject itself does not define Core/Major/GenEd globally'
+}
+
+Table CurriculumSubject {
+  id uuid [pk]
+  curriculum_id uuid [not null]
+  subject_id uuid [not null]
+  type subject_requirement_type [not null]
+  semester_recommended int
+  year_recommended int
+
+  indexes {
+    (curriculum_id, subject_id) [unique]
+  }
+}
+
+Table Student {
+  id uuid [pk]
+  curriculum_id uuid [not null]
+  student_code varchar [not null, unique]
+  name varchar [not null]
+}
+
+Table OpenClass {
+  id uuid [pk]
+  subject_id uuid [not null]
+  academic_year int [not null]
+  semester int [not null]
+
+  Note: 'An offering of a subject in a specific semester'
+}
+
+Table Section {
+  id uuid [pk]
+  open_class_id uuid [not null]
+  section_no varchar [not null]
+  capacity int
+
+  indexes {
+    (open_class_id, section_no) [unique]
+  }
+}
+
+Table Enrollment {
+  id uuid [pk]
+  student_id uuid [not null]
+  section_id uuid [not null]
+  status enrollment_status [not null]
+  grade varchar
+
+  indexes {
+    (student_id, section_id) [unique]
+  }
+}
+
+Ref: Faculty.university_id > University.id
+Ref: Department.faculty_id > Faculty.id
+Ref: Curriculum.department_id > Department.id
+Ref: Subject.department_id > Department.id
+Ref: CurriculumSubject.curriculum_id > Curriculum.id
+Ref: CurriculumSubject.subject_id > Subject.id
+Ref: Student.curriculum_id > Curriculum.id
+Ref: OpenClass.subject_id > Subject.id
+Ref: Section.open_class_id > OpenClass.id
+Ref: Enrollment.student_id > Student.id
+Ref: Enrollment.section_id > Section.id

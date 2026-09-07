@@ -1,0 +1,6 @@
+{% extends "academics/base.html" %}
+{% block title %}Open Classes | UniCore{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Open Classes</h1><div class="muted">วิชาที่เปิดในปีการศึกษาและภาคเรียน</div></div><a class="btn" href="{% url 'academics:open-class-create' %}">เปิดวิชา</a></div>
+<div class="table-wrap"><table><thead><tr><th>ปี/เทอม</th><th>รายวิชา</th><th>Sections</th><th></th></tr></thead><tbody>{% for item in open_classes %}<tr><td>{{ item.semester }}/{{ item.academic_year }}</td><td><a href="{% url 'academics:open-class-detail' item.pk %}"><strong>{{ item.subject.code }}</strong> {{ item.subject.name }}</a></td><td>{% for section in item.sections.all %}<a href="{% url 'academics:section-detail' section.pk %}">{{ section.section_no }}</a>{% if not forloop.last %}, {% endif %}{% empty %}-{% endfor %}</td><td><a href="{% url 'academics:section-create' item.pk %}">เพิ่ม Section</a></td></tr>{% empty %}<tr><td colspan="4" class="empty">ยังไม่มีวิชาที่เปิดสอน</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

@@ -1,0 +1,6 @@
+{% extends "academics/base.html" %}
+{% block title %}{{ open_class.subject.code }} | UniCore{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>{{ open_class.subject.code }} {{ open_class.subject.name }}</h1><div class="muted">ภาคเรียน {{ open_class.semester }}/{{ open_class.academic_year }}</div></div><a class="btn" href="{% url 'academics:section-create' open_class.pk %}">เพิ่ม Section</a></div>
+<div class="grid two">{% for section in open_class.sections.all %}<section class="card"><div class="page-head"><h2>Section {{ section.section_no }}</h2><a href="{% url 'academics:section-detail' section.pk %}">รายละเอียด</a></div><div class="metric">{{ section.enrolled_count }}{% if section.capacity %}/{{ section.capacity }}{% endif %}</div><div class="muted">นักศึกษาที่ลงทะเบียน</div><p><a class="btn small" href="{% url 'academics:enrollment-create' %}?section={{ section.pk }}">รับนักศึกษา</a></p></section>{% empty %}<section class="card empty">ยังไม่มี Section</section>{% endfor %}</div>
+{% endblock %}

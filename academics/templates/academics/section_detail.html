@@ -1,0 +1,7 @@
+{% extends "academics/base.html" %}
+{% block title %}Section {{ section.section_no }} | UniCore{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>{{ section.open_class.subject.code }} Section {{ section.section_no }}</h1><div class="muted">{{ section.open_class.subject.name }} · {{ section.open_class.semester }}/{{ section.open_class.academic_year }}</div></div><a class="btn" href="{% url 'academics:enrollment-create' %}?section={{ section.pk }}">รับนักศึกษา</a></div>
+<div class="card"><strong>จำนวนลงทะเบียน:</strong> {{ section.enrolled_count }}{% if section.capacity %}/{{ section.capacity }}{% else %} (ไม่จำกัด){% endif %}</div>
+<section class="section"><h2>นักศึกษาใน Section</h2><div class="table-wrap"><table><thead><tr><th>รหัส</th><th>ชื่อ</th><th>สถานะ</th><th>เกรด</th><th></th></tr></thead><tbody>{% for item in enrollments %}<tr><td>{{ item.student.student_code }}</td><td><a href="{% url 'academics:student-detail' item.student.pk %}">{{ item.student.name }}</a></td><td><span class="badge">{{ item.status }}</span></td><td>{{ item.grade|default:"-" }}</td><td>{% if item.status == 'Enrolled' %}<a class="btn small" href="{% url 'academics:enrollment-grade' item.pk %}">บันทึกเกรด</a>{% endif %}</td></tr>{% empty %}<tr><td colspan="5" class="empty">ยังไม่มีนักศึกษา</td></tr>{% endfor %}</tbody></table></div></section>
+{% endblock %}

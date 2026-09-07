@@ -1,0 +1,7 @@
+{% extends "academics/base.html" %}
+{% block title %}หลักสูตรและรายวิชา | UniCore{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>หลักสูตรและรายวิชา</h1><div class="muted">ประเภท Core/Major/GenEd/Elective อยู่ที่ CurriculumSubject</div></div><div class="actions"><a class="btn" href="{% url 'academics:subject-create' %}">เพิ่ม Subject</a><a class="btn secondary" href="{% url 'academics:curriculum-subject-create' %}">เพิ่มวิชาเข้าหลักสูตร</a></div></div>
+<section><h2>Subjects</h2><div class="table-wrap"><table><thead><tr><th>รหัส</th><th>ชื่อวิชา</th><th>หน่วยกิต</th><th>ภาควิชา</th><th></th></tr></thead><tbody>{% for item in subjects %}<tr><td><strong>{{ item.code }}</strong></td><td>{{ item.name }}</td><td>{{ item.credit }}</td><td>{{ item.department|default:"-" }}</td><td><a href="{% url 'academics:subject-edit' item.pk %}">แก้ไข</a></td></tr>{% empty %}<tr><td colspan="5" class="empty">ยังไม่มีรายวิชา</td></tr>{% endfor %}</tbody></table></div></section>
+<section class="section"><h2>Curriculum Subjects</h2><div class="table-wrap"><table><thead><tr><th>หลักสูตร</th><th>รายวิชา</th><th>ประเภท</th><th>ชั้นปีแนะนำ</th><th>เทอมแนะนำ</th></tr></thead><tbody>{% for item in requirements %}<tr><td>{{ item.curriculum }}</td><td>{{ item.subject }}</td><td><span class="badge">{{ item.type }}</span></td><td>{{ item.year_recommended|default:"-" }}</td><td>{{ item.semester_recommended|default:"-" }}</td></tr>{% empty %}<tr><td colspan="5" class="empty">ยังไม่มีวิชาในหลักสูตร</td></tr>{% endfor %}</tbody></table></div></section>
+{% endblock %}

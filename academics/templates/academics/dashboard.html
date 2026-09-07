@@ -1,0 +1,15 @@
+{% extends "academics/base.html" %}
+{% block title %}Dashboard | UniCore{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>University Management System</h1><div class="muted">Curriculum-based academic registration</div></div><div class="actions"><a class="btn" href="{% url 'academics:enrollment-create' %}">ลงทะเบียน</a><a class="btn secondary" href="{% url 'academics:student-create' %}">เพิ่มนักศึกษา</a></div></div>
+<div class="grid">
+    <div class="card"><div class="muted">นักศึกษา</div><div class="metric">{{ student_count }}</div></div>
+    <div class="card"><div class="muted">หลักสูตร</div><div class="metric">{{ curriculum_count }}</div></div>
+    <div class="card"><div class="muted">รายวิชา</div><div class="metric">{{ subject_count }}</div></div>
+    <div class="card"><div class="muted">Open Classes</div><div class="metric">{{ open_class_count }}</div></div>
+</div>
+<div class="grid two section">
+    <section class="card"><div class="page-head"><h2>วิชาที่เปิดสอน</h2><a href="{% url 'academics:open-class-list' %}">ดูทั้งหมด</a></div>{% for item in open_classes %}<p><a href="{% url 'academics:open-class-detail' item.pk %}"><strong>{{ item.subject.code }}</strong> {{ item.subject.name }}</a><br><span class="muted">{{ item.semester }}/{{ item.academic_year }} · {{ item.section_count }} Section</span></p>{% empty %}<div class="empty">ยังไม่มีวิชาที่เปิดสอน</div>{% endfor %}</section>
+    <section class="card"><h2>การลงทะเบียน</h2>{% for item in recent_enrollments %}<p><a href="{% url 'academics:student-detail' item.student.pk %}"><strong>{{ item.student.name }}</strong></a><br><span class="muted">{{ item.section.open_class.subject.code }} Section {{ item.section.section_no }} · {{ item.status }}</span></p>{% empty %}<div class="empty">ยังไม่มีการลงทะเบียน</div>{% endfor %}</section>
+</div>
+{% endblock %}

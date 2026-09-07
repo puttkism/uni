@@ -1,0 +1,11 @@
+{% extends "academics/base.html" %}
+{% block title %}โครงสร้างองค์กร | UniCore{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>โครงสร้างองค์กร</h1><div class="muted">University → Faculty → Department → Curriculum</div></div></div>
+<div class="grid two">
+<section class="card"><div class="page-head"><h2>มหาวิทยาลัย</h2><a class="btn small" href="{% url 'academics:university-create' %}">เพิ่ม</a></div>{% for item in universities %}<p><strong>{{ item.name }}</strong><br><span class="muted">{{ item.faculties.count }} คณะ</span></p>{% empty %}<div class="empty">ยังไม่มีข้อมูล</div>{% endfor %}</section>
+<section class="card"><div class="page-head"><h2>คณะ</h2><a class="btn small" href="{% url 'academics:faculty-create' %}">เพิ่ม</a></div>{% for item in faculties %}<p><strong>{{ item.name }}</strong><br><span class="muted">{{ item.university }}</span></p>{% empty %}<div class="empty">ยังไม่มีข้อมูล</div>{% endfor %}</section>
+<section class="card"><div class="page-head"><h2>ภาควิชา</h2><a class="btn small" href="{% url 'academics:department-create' %}">เพิ่ม</a></div>{% for item in departments %}<p><strong>{{ item.name }}</strong><br><span class="muted">{{ item.faculty }}</span></p>{% empty %}<div class="empty">ยังไม่มีข้อมูล</div>{% endfor %}</section>
+<section class="card"><div class="page-head"><h2>หลักสูตร</h2><a class="btn small" href="{% url 'academics:curriculum-create' %}">เพิ่ม</a></div>{% for item in curricula %}<p><strong>{{ item.name }}</strong><br><span class="muted">{{ item.year }} · {{ item.department }}</span></p>{% empty %}<div class="empty">ยังไม่มีข้อมูล</div>{% endfor %}</section>
+</div>
+{% endblock %}

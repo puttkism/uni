@@ -1,0 +1,7 @@
+{% extends "academics/base.html" %}
+{% block title %}{{ student.name }} | UniCore{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>{{ student.name }}</h1><div class="muted">{{ student.student_code }}</div></div><div class="actions"><a class="btn" href="{% url 'academics:enrollment-create' %}?student={{ student.pk }}">ลงทะเบียน</a><a class="btn secondary" href="{% url 'academics:student-edit' student.pk %}">แก้ไข</a></div></div>
+<div class="detail-grid"><aside class="card"><h2>ข้อมูลนักศึกษา</h2><dl><dt>UUID</dt><dd>{{ student.pk }}</dd><dt>หลักสูตร</dt><dd>{{ student.curriculum }}</dd><dt>ภาควิชา</dt><dd>{{ student.curriculum.department }}</dd></dl></aside>
+<section><h2>ประวัติการลงทะเบียน</h2><div class="table-wrap"><table><thead><tr><th>ปี/เทอม</th><th>วิชา/Section</th><th>สถานะ</th><th>เกรด</th><th></th></tr></thead><tbody>{% for item in enrollments %}<tr><td>{{ item.section.open_class.semester }}/{{ item.section.open_class.academic_year }}</td><td>{{ item.section.open_class.subject }}<br><span class="muted">Section {{ item.section.section_no }}</span></td><td><span class="badge">{{ item.status }}</span></td><td>{{ item.grade|default:"-" }}</td><td>{% if item.status == 'Enrolled' %}<form method="post" action="{% url 'academics:enrollment-withdraw' item.pk %}">{% csrf_token %}<button class="btn danger small">ถอน</button></form>{% endif %}</td></tr>{% empty %}<tr><td colspan="5" class="empty">ยังไม่มีการลงทะเบียน</td></tr>{% endfor %}</tbody></table></div></section></div>
+{% endblock %}
